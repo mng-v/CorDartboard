@@ -331,7 +331,7 @@ server <- function(input, output) {
                          DT::dataTableOutput("table1"))       
                  ),
        
-        tabPanel("Type change",value = "Type number change to factor",
+        tabPanel("Variables' types",value = "Type",
                  h4("Dataset variables' types", style = "color: #067BA8"),
                  valueBoxOutput("num_type"),
                  valueBoxOutput("fac_type"),
@@ -340,19 +340,10 @@ server <- function(input, output) {
                  #1
                  box(
                    tableOutput("every_type"),
-                       status = "info", title = h4("1.The types of all variables"),
+                       status = "info", title = h4("The types of all variables"),
                    width = 4
-                      ),
-                 #2
-                 valueBoxOutput("all_types"),
-                 #3
-                box(title = h4("3. Change Data Type"),  status = "info", width = 3,
-                     solidHeader = TRUE, collapsible = FALSE,
-                     radioButtons("choose_class", label = "",choices = list(Numeric = "Numeric",Factor = "Factor", Character = "Character")
-                                  , selected = ""), 
-                     actionButton("chg_type", "Change")
-                 )
-        ))
+                      )
+           ))
     })
     #NAV2 reactived
     # 1. Download  csv of selected dataset ----
