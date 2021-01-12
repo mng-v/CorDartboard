@@ -98,8 +98,24 @@ I believe that successful learning happens through projects,
 you cannot know everything and it is difficult for one to create something on a large scale.
                             "
                           ),
+                             flipBox(
+                          id = 2,
+                          main_img = "Erika.jpg",
+                          header_img = "orangeBG.jpg",
+                          front_title = "Erika Maksimova",
+                          back_title = "About Erika",
+                          back_content="
+                            I am a first year Computer Science BSc student at Tallinn University of Technology. I am interested in artificial intelligence, machine learning and Python,
+                            but I always look for new projects and new opportunities to widen my horizons.
+                            I have chosen the field of IT because of my passion for innovation and progress 
+                            — I believe that you only truly learn something when you find a way to apply your
+                            knowledge for the betterment of others. In my free time I like to learn different 
+                            languages, seeing as I believe that it is important to continue the process of
+                            learning even out of school and work environment.
+                            "
+                        ),
                           flipBox(
-                            id = 2,
+                            id = 3,
                             main_img = "projectLogo.JPG",
                             header_img = "blueBG.jpg",
                             front_title = "Correlation project",
