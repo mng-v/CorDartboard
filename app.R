@@ -415,19 +415,25 @@ server <- function(input, output) {
         newData= numData()
         nr <- y_nr()
         Y <- newData[,nr]
-        cor(x=newData,y=Y)
+        #cor(x=newData,y=Y)
+        cor(newData)[nr,-nr]
       })
    #corDB <- data.frame(value = abs(r),variable=colnames(num_db[,-1]),sign=ifelse(r>0,"+","-")) 
       corDB <- reactive({
+        nr <- y_nr()
         corr <- r()
-        num_db <- numData()
+        #num_db <- numData()
+        num_db <- numData()[,- y_nr()]
         var <- colnames(num_db)
-        data.frame(Cor=corr,Var=var,Sign=ifelse(corr>0,"+","-"))
+        
+          data.frame(Cor=corr,Var=var,Sign=ifelse(corr>0,"+","-"))
+       
+          
         
       })
       #very strong vs<- data.frame(V=ifelse(abs(r)<=1 & abs(r)>0.8,1,0),name=row.names(r),corr=r)
       veryStrong <- reactive({
-        corDB() %>% filter(abs(Cor)<=0.9999 & abs(Cor)>0.8)
+        corDB() %>% filter(abs(Cor)<1 & abs(Cor)>0.8)
        
       })
       strong <- reactive({
@@ -455,7 +461,7 @@ server <- function(input, output) {
       #3
       output$yCor <- renderText({
         
-        HTML("Select y correlatsion Vector: ",round(r(),3))})
+        HTML("Select y correlatsion Vector: ",round(r()[-y_nr()],3))})
       #4.1
       output$corVS <- renderTable({
          veryStrong() %>% select(Cor,Sign,Var) %>% mutate(Cor=abs(Cor)) %>% arrange(desc(abs(Cor)))
@@ -471,17 +477,17 @@ server <- function(input, output) {
           medium() %>% select(Cor,Sign,Var) %>% mutate(Cor=abs(Cor)) %>% arrange(desc(Cor))
         
       })
-      #5
+      #5 PLOT 1
       output$plotCor <- renderPlot({
-      if(is.null(corDB())){return()}
+      #if(ncol(corDB)==0){return()}
      
        # DB() <- corDB() %>% filter(Cor!=1)
         r.n <- corDB() %>% filter(Cor<0) %>%  select(Cor)
         r.p <- corDB() %>% filter(Cor>0 & Cor<1) %>% select(Cor)
         rC.n <- as.vector(1-abs(r.n))
         rC.p <- as.vector(1-r.p)
-        
-       
+        n <- nrow(rC.p)
+        m <- nrow(rC.n)
         #ainult pos corr
         phi_d_p <- matrix()
         p <- seq(1:length(rC.p))
@@ -508,9 +514,41 @@ server <- function(input, output) {
                text.col = "brown",
                fill=c( "#ffcc33",  "#ffff99","#cce2cb","aquamarine3","chartreuse3"),
                bg = "gray90")
-        draw.arc(x=0,y=0,radius=rC.n$Cor, deg1 = phi_d_n,deg2 = phi_d_n+3,lwd = 5,col = "#ff6666") 
-        draw.arc(x=0,y=0,radius=rC.p$Cor, deg1 = phi_d_p,deg2 = phi_d_p+3,lwd = 5,col = "#006666") 
+        if(m!=0)
+         
+          draw.arc(x=0,y=0,radius=rC.n$Cor, deg1 = phi_d_n,deg2 = phi_d_n+3,lwd = 5,col = "#ff6666") 
+        if(n!=0)
+            draw.arc(x=0,y=0,radius=rC.p$Cor, deg1 = phi_d_p,deg2 = phi_d_p+3,lwd = 5,col = "#006666") 
+        else
+          draw.arc(0,0,0)
+         
+      })
+      #PLOT 2 ggplot
+      output$ggplotCor <- renderPlot({
+        distance <- function(x, y) {sqrt((x)^2 + (y)^2)}
+        d <- expand.grid(x = seq(-1, 1, 0.01), y = seq(-1, 1, 0.01))
         
+        d$dist <- mapply(distance, x = d$x, y = d$y)
+        d$incircle <- (d$x)^2 + (d$y)^2 < 1 
+        d <- d[d$incircle,]
+        #data.frame(Cor=corr,Var=var,Sign=ifelse(corr>0,"+","-"))
+        DF <- corDB() %>% filter(Cor<1)
+        n <- nrow(DF)
+        alpha <- sample(seq(0,2*pi,2*pi/10),n,replace = TRUE)
+        DF$x <- (1-abs(DF$Cor))*cos(alpha)
+        DF$y <- (1-abs(DF$Cor))*sin(alpha)
+        ggplot(data=d, aes(x, y)) +
+          geom_raster(aes(fill = dist), interpolate = T) +
+          stat_contour(aes(z = dist), col = 'white',breaks = seq(0, 1, 0.2)) +
+          coord_fixed() + 
+          scale_fill_gradient2(low="red", mid = 'yellow', high="blue",midpoint = 1, 
+                               breaks = seq(0,0.8,0.2),labels = c("high", "", "medium", "", "low"),
+                               name="")+
+          geom_point(data=DF,aes(x,y,color=Sign,pch=Sign))+
+          geom_text(data=DF,aes(x,y,label=Var,color=Sign),hjust=1, vjust=1, angle=45)+
+          
+          scale_color_manual(guide = FALSE, values = c("black", "darkgreen"))+
+          theme_void()
       })
       #6
       output$vStrongV <- renderInfoBox({
@@ -610,11 +648,13 @@ server <- function(input, output) {
                           valueBoxOutput("vWeakV",width = box_size)
                         )
                        )),
-                      h4("The correlation darthboard", style = "color: #067BA8"),
-                      plotOutput("plotCor", height = "440px"),
+                      h4("The correlation dartboard #1", style = "color: #067BA8"),
+                      plotOutput("plotCor", height = "450px"),
+                      h4("The correlation dartboard #2", style = "color: #067BA8"),
+                      plotOutput('ggplotCor'),
                       
                           fluidRow(
-                            div(style="text-align:center;",
+                            div(style="text-align:center",
                             if (nrow(veryStrong())==0)
                               p("")
                             else
