@@ -25,10 +25,10 @@ ui <- fluidPage(
     theme = shinytheme("yeti"),
     navbarPage(title = "Virumaa college",
                
-                tabPanel("Nav1:File",
+                tabPanel("Nav1: File",
                 
                         # Application title
-                        titlePanel("File upload"),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                        titlePanel("File Uploading"),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                         
                         # Sidebar with a slider input for number of bins 
                         sidebarLayout(fluid = TRUE,
@@ -51,7 +51,7 @@ ui <- fluidPage(
                             ,
                             
                             
-                            # Show a file and files info
+                            # Show a file and file info
                             mainPanel(uiOutput("tb"))
                         )   
                ),
@@ -91,13 +91,11 @@ ui <- fluidPage(
                             front_title = "Natalja Maksimova",
                             back_title = "About Natalja",
                             back_content="
-                            I am a second year student of the Virumaa College
-                            master's degree at the correspondence department.
-I am interested in data analysis, machine learning. I like to work in RStudio.
-Besides, I like to create 3D models, create animations and a little game.
-I believe that useful learning happens through projects, 
-you cannot know everything and it is difficult for one to create 
-something on a large scale.
+                            I'm a second year MSc student in Business Information Technology at TalTech Virumaa College.
+I'm interested in data analysis, machine learning and R language. I like to work with RStudio.
+Besides, I like to create 3D models, animations and web games.
+I believe that successful learning happens through projects, 
+you cannot know everything and it is difficult for one to create something on a large scale.
                             "
                           ),
                           flipBox(
@@ -108,17 +106,17 @@ something on a large scale.
                             back_title = "About project",
                             back_content= "This project was created to determine and 
                             visualize the strength of the linear relationship between 
-                            numerical data features. The linear relationship is 
-                            defined through the linear correlation coefficient. 
-                            Linear correlation refers to straight-line relationships between two variables
-This project explores correlation using a graph that resembles a dart-throwing target, which is divided into 5 rings of 0.2 height. The points on this target are the correlation coefficients, and the closer to the center, the stronger the influence of this feature on the investigated one. The correlation sign is shown in color, positive - green and negative correlation coefficient - in rat color.
-It's very simple to work:
-1. Download the data file from your computer
-2. Remove unnecessary signs from the list of used signs. You can also see an overview of types for data characteristics here.
-3. Visualization of the strength of linear dependence of only numerical data features. In addition to visualization, the total
-                            number of strengths very weak, weak, medium, strong, very strong was calculated.
-                            Since in the future medium, strong, very strong is more interesting, the name of 
-                            these features is displayed on the screen separately after the graph.",
+                            numerical variables. The strength of the relationship between a selected target variable and the other variables in a data set is 
+                            determined through the linear correlation coefficient. 
+                            Linear correlation refers to straight-line relationships between two variables.
+This project explores correlation using a chart that resembles a dartboard with radius 1, which is divided into 5 concentric rings of equal width. The position of a point on this dartboard is defined by the correlation coefficient, and the closer to the center, the greater feature influence on the target variable. The correlation sign is shown using color: green for positive and red for negative correlation coefficients.
+It works very simply. The main panel consists of four tabs Nav1: File, Nav2: Variables, Nav3: Correlation, Nav4: About project.
+1. On the Nav1: File tab upload the data file from your computer. You can specify the columns separator and the encoding and mark header and stringAsFactor options. You can also get a descriptive overview of the dataset here by clicking on the subtab Summary.
+2. On the Nav2: Variables tab you see the list of all dataset variables. Remove unnecessary variables before calculating correlations by unchecking their check boxes. You can also see here an overview of types of variables included in the dataset.
+3. On the Nav3: Correlation tab visualization of the strength of linear dependence is provided using only numerical data features. You should select your target variable from the list. In addition to visualization, the total
+                            numbers of variables with very weak, weak, medium, strong, very strong correlation with target variable are calculated.
+                            Since in the future medium, strong, very strong relationships are more interesting, the names of 
+                            these features are displayed below the chart.",
                             fluidRow(
                               boxPad(
                                # color = "green",
@@ -156,7 +154,7 @@ server <- function(input, output) {
         
     )
     
-    #this reactive output containts of the dataset and display the summary in table format
+    #this reactive output contains the dataset
     output$filedf <- renderTable({
         file_to_read=input$file
         if(is.null(data())){
@@ -167,7 +165,7 @@ server <- function(input, output) {
     }
         
     )
-    #this reactive output contains the  dataset and display in table format
+    #this reactive output displays the dataset in table format
     output$table <- DT::renderDataTable({
         if(is.null(data())){return ()}
         DT::datatable(data(),
@@ -175,14 +173,14 @@ server <- function(input, output) {
                       )
     })
     
-    # this reactive output dataset deminsion
+    # this reactive output displays dataset dimensions
     output$dim <- renderText({
         
         HTML(paste0("Rows number is ",nrow(data())," and columns number is ", ncol(data())))
         
         })
     
-    #this reactive output contains the summary of the dataset and display the summary in table format
+    #this reactive output contains the summary of the dataset and displays the summary in table format
     output$sum <- renderPrint({
         if(is.null(data())){return()}
         summary(data())
@@ -201,8 +199,8 @@ server <- function(input, output) {
                 tabPanel("File",
                          h4("File options:", style = "color: #067BA8"),
                          tableOutput("filedf"),
-                        tabPanel("Dataset dimension",
-                                 h4("File dimension:", style = "color: #067BA8"),
+                        tabPanel("Dataset dimensions",
+                                 h4("Dataset dimensions:", style = "color: #067BA8"),
                                  textOutput("dim"),
                                  br()),
                         tabPanel("Data",
@@ -210,7 +208,7 @@ server <- function(input, output) {
                                  DT::dataTableOutput("table"))
                         ),
                 tabPanel("Summary",
-                         h4("Summaries of the dataset:", style = "color: #067BA8"),
+                         h4("Summary of the dataset:", style = "color: #067BA8"),
                          verbatimTextOutput("sum"))
                 )
     })
@@ -224,7 +222,7 @@ server <- function(input, output) {
     output$Pre <- renderUI({
         newData=data()
         if(is.null(newData))
-            p("Opens if select a file")
+            p("Opens if some file is selected")
         else
         conditionalPanel(
             #Input
@@ -234,13 +232,13 @@ server <- function(input, output) {
                                                label="",
                                                names(newData),choices = names(newData)),
             # Button
-            h5("Dowload dataset to csv file to your computer:"),
+            h5("Dowload dataset as csv file to your computer:"),
             downloadButton("downloadData", "Download")
         )
     })
     
     #NAV2 renders
-    # show data after feature selection
+    # shows data after feature selection
     output$table1 <- DT::renderDataTable({
         newData=data()
         if(is.null(newData)){return ()}
@@ -250,7 +248,7 @@ server <- function(input, output) {
     })
     
     
-    # output how many numeric or factor variables in total
+    # outputs how many numeric or factor variables are in total
     output$num_type <- renderValueBox({
       
          nData=selectData()
@@ -268,11 +266,11 @@ server <- function(input, output) {
     output$chr_type <- renderValueBox({
       nData=selectData()
       valueBox(sum(sapply(nData, is.character)),
-               "Charecter variables", icon = icon("paragraph"),color = "navy")
+               "Character variables", icon = icon("paragraph"),color = "navy")
       
     })
     
-    # output the types of selected features
+    # outputs the types of the selected features
     output$every_type <- renderTable({
       nData=selectData()
       t=sapply(nData,class)
@@ -281,7 +279,7 @@ server <- function(input, output) {
       cbind(Var=r,Type=t)
     })
     
-    #output box 2 witch the types list for select
+    #outputs box 2 with the types of the selected variables
     output$all_types <- renderValueBox({
       nData=selectData()
       valueBox(
@@ -305,20 +303,20 @@ server <- function(input, output) {
         
        if(is.null(data()))
                {
-                h5("TEKST")
+                h5("TEXT")
                 h5("Works in",tags$img(src='RStudio.png',heigth=170,width=170),
                tags$img(src='Virumaa_kolledz_gradient_EST_veeb.jpg',heigth=170,width=170))
               }
        else
         tabsetPanel(id="variables",
-        tabPanel("Works with variables",
+        tabPanel("Work with variables",
                 tabPanel("Data rep",
                          h4("Dataset after feature selection:", style = "color: #067BA8"),
                          DT::dataTableOutput("table1"))       
                  ),
        
         tabPanel("Type change",value = "Type number change to factor",
-                 h4("Dataset data types report", style = "color: #067BA8"),
+                 h4("Dataset variables' types", style = "color: #067BA8"),
                  valueBoxOutput("num_type"),
                  valueBoxOutput("fac_type"),
                  valueBoxOutput("chr_type"),
@@ -350,14 +348,14 @@ server <- function(input, output) {
         write.csv(selectData(), file, row.names = FALSE)
       }
     )
-    #write the newdata witch the selected variables
+    #write the newdata with the selected variables
     selectData <- reactive({
       newData=data()
       if(is.null(newData)){return ()}
       newData[,input$select_vars, drop = FALSE]
     })
     
-    #write the newdata witch the selected changeTypeData variables
+    #write the newdata with the selected changeTypeData variables
     changeTypeData <- reactive({
       newData=selectData()
       #variable <- input$class_var
@@ -454,14 +452,14 @@ server <- function(input, output) {
       #1
       output$y_text <- renderText({
         if(is.null(numData())){return ()}
-        HTML("Select y: ",input$select_y)})
+        HTML("Selected y: ",input$select_y)})
       #2
       output$yNr <- renderText({
-        HTML("Select y number of column: ",y_nr())})
+        HTML("Number of column for selected y: ",y_nr())})
       #3
       output$yCor <- renderText({
         
-        HTML("Select y correlatsion Vector: ",round(r()[-y_nr()],3))})
+        HTML("Vector of correlations with selected y: ",round(r()[-y_nr()],3))})
       #4.1
       output$corVS <- renderTable({
          veryStrong() %>% select(Cor,Sign,Var) %>% mutate(Cor=abs(Cor)) %>% arrange(desc(abs(Cor)))
@@ -605,13 +603,13 @@ server <- function(input, output) {
     output$sidebar3 <- renderUI({
       newData=numData()
       if(is.null(newData))
-        p("Opens if select a file")
+        p("Opens if some file is selected")
       else
        
           conditionalPanel(
           #Input
             br(),
-            h5("Select one variabl for predict"),
+            h5("Select a target variable y"),
           radioButtons(inputId = "select_y",
                        label="",
                        names(newData))
@@ -623,16 +621,16 @@ server <- function(input, output) {
     output$main3 <- renderUI({
       if(is.null(data()))
       {
-        h5("TEKST")
+        h5("TEXT")
         h5("Works in",tags$img(src='RStudio.png',heigth=170,width=170),
            tags$img(src='Virumaa_kolledz_gradient_EST_veeb.jpg',heigth=170,width=170))
       }
       else
         tabsetPanel(id="cor",
-                    tabPanel("Correlatsion",
+                    tabPanel("Correlation",
                       
                       br(),
-                      h4("Predictable feature:", style = "color: #067BA8"),
+                      h4("Predictable variable:", style = "color: #067BA8"),
                       textOutput("y_text"),
                      
                       br(),
