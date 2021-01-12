@@ -28,16 +28,16 @@ ui <- fluidPage(
                 tabPanel("Nav1:File",
                 
                         # Application title
-                        titlePanel("File input"),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                        titlePanel("File upload"),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                         
                         # Sidebar with a slider input for number of bins 
                         sidebarLayout(fluid = TRUE,
                             sidebarPanel(style = "background-color: #FEF8DF",
                                 
-                                    h5("Upload the fail from computer"),   
+                                    h5("Upload the file from computer"),   
                                     fileInput("file",
                                               "Upload the file:"),
-                                    h5("Default maximal the file size is 5 MB"),
+                                    h5("The default maximum file size is 5 MB"),
                                     radioButtons("sep","Separator",
                                                  choices = c(Comma=',',Semicolon=';',Tab='\t',Space='')
                                     ),br(),
@@ -56,7 +56,7 @@ ui <- fluidPage(
                         )   
                ),
                tabPanel("Nav2: Variables",
-                        titlePanel("Work with variables of dataset"),
+                        titlePanel("Working with dataset variables"),
                         tags$head(tags$style(type = 'text/css',".shiny-input-panel{background-color: darkgreen}")),
                           sidebarLayout( position = c("left"),fluid = FALSE,
                             sidebarPanel(style = "background-color: #FEF8DF",
@@ -68,8 +68,8 @@ ui <- fluidPage(
                                       )
                        ),
                         
-               tabPanel("Nav3: Correlatsion",
-                        titlePanel("Work with correlatsion"), 
+               tabPanel("Nav3: Correlation",
+                        titlePanel("Working with correlation"), 
                         sidebarLayout( position = c("left"),fluid = TRUE,
                         sidebarPanel(style = "background-color: #FEF8DF",
                           uiOutput("sidebar3"),
@@ -93,7 +93,7 @@ ui <- fluidPage(
                             back_content="
                             I am a second year student of the Virumaa College
                             master's degree at the correspondence department.
-I am interested in data analysis, machine learning.I like to work in RStudio.
+I am interested in data analysis, machine learning. I like to work in RStudio.
 Besides, I like to create 3D models, create animations and a little game.
 I believe that useful learning happens through projects, 
 you cannot know everything and it is difficult for one to create 
@@ -104,10 +104,10 @@ something on a large scale.
                             id = 2,
                             main_img = "projectLogo.JPG",
                             header_img = "blueBG.jpg",
-                            front_title = "Correlatsion project",
+                            front_title = "Correlation project",
                             back_title = "About project",
                             back_content= "This project was created to determine and 
-                            visualize the strength of the linear relationship of 
+                            visualize the strength of the linear relationship between 
                             numerical data features. The linear relationship is 
                             defined through the linear correlation coefficient. 
                             Linear correlation refers to straight-line relationships between two variables
