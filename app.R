@@ -306,12 +306,7 @@ server <- function(input, output) {
        icon = icon("edit"), subtitle = "then choose another type")
     })
     
-    #TEST render
-    output$selectType <- renderTable({
-      head(changeTypeData())
-          })
-  
-    
+     
    
     
     # NAV2 mainpanel
@@ -336,7 +331,7 @@ server <- function(input, output) {
                  valueBoxOutput("num_type"),
                  valueBoxOutput("fac_type"),
                  valueBoxOutput("chr_type"),
-                 renderTable("selectType"),
+                
                  #1
                  box(
                    tableOutput("every_type"),
@@ -362,27 +357,7 @@ server <- function(input, output) {
       newData[,input$select_vars, drop = FALSE]
     })
     
-    #write the newdata with the selected changeTypeData variables
-    changeTypeData <- reactive({
-      newData=selectData()
-      #variable <- input$class_var
-      if( input$choose_class == "Numeric"){
-        newData[,input$class_var] <- as.numeric(newData[,input$class_var] )
-      } else if(input$choose_class == "Factor"){
-        newData[,input$class_var]  <- as.factor(newData[,input$class_var] )
-      } else if( input$choose_class == "Character"){
-        newData[,input$class_var]  <- as.character(newData[,input$class_var] )
-      }
-      newData
       
-    })
-    
-    #Button "Change data"
-    observeEvent(input$chg_type, {
-      
-    })
-    
-    
     
     #NAV3 reactived 
     
