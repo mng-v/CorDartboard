@@ -6,6 +6,14 @@
 #
 #    http://shiny.rstudio.com/
 #
+# install.packages("shiny")
+# install.packages("shinydashboard")
+# install.packages("shinydashboardPlus")
+# install.packages("shinythemes")
+# install.packages("shinyalert")
+# install.packages("plotrix")
+# install.packages("RColorBrewer")
+# install.packages("dplyr")
 
 library(shiny)
 library(shinydashboard)
