@@ -11,3 +11,6 @@ It works very simply. The main panel consists of four tabs Nav1: File, Nav2: Var
 
 3. On the Nav3: Correlation tab visualization of the strength of linear dependence is provided using only numerical data features. You should select your target variable from the list. In addition to visualization, the total numbers of variables with very weak, weak, medium, strong, very strong correlation with target variable are calculated.
 Since in the future medium, strong, very strong relationships are more interesting, the names of these features are displayed below the chart.
+
+----------------------------------------------------
+This is an interactive Shiny/R web application. To use this application, you need R and RStudio installed on your computer (and to know how to use them). Place app.R file with the application code and www folder with supplementary materials into an application directory in your working directory. You will need the packages commented in the app.r file. You can run the application in RStudio by giving the name of its directory to the function runApp().
