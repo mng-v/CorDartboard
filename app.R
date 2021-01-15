@@ -14,6 +14,7 @@
 # install.packages("plotrix")
 # install.packages("RColorBrewer")
 # install.packages("dplyr")
+# install.packages("ggplot2")
 
 library(shiny)
 library(shinydashboard)
@@ -23,6 +24,7 @@ library(shinyalert)
 library(plotrix)
 library(RColorBrewer)
 library(dplyr)
+library(ggplot2)
 #
 box_size <- 2
 
